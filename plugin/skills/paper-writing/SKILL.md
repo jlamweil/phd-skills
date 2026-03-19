@@ -115,8 +115,20 @@ After generating any figure:
 
 ## Output Format
 
-When writing paper text:
+When writing paper text, detect the project format and match it:
+
+### LaTeX projects (`.tex` files present)
 - Provide LaTeX-ready output that matches the paper's existing style
 - Include comments for any claim that needs verification: `% TODO: verify this number`
+- Flag any notation inconsistencies found during writing
+- Suggest specific improvements with before/after comparisons
+
+### Pandoc Markdown projects (`.md` paper files present)
+- Provide Pandoc-flavored Markdown output
+- Use `$...$` for inline math and `$$...$$` for display math
+- Use `[@key]` citation syntax (NOT `\cite{key}`)
+- Include YAML front matter conventions where relevant (`title`, `author`, `bibliography`)
+- Use HTML comments for verification notes: `<!-- TODO: verify this number -->`
+- For cross-references, use pandoc-crossref syntax: `@fig:label`, `@tbl:label`, `@eq:label`
 - Flag any notation inconsistencies found during writing
 - Suggest specific improvements with before/after comparisons

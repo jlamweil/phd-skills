@@ -2,7 +2,8 @@
 
 Research integrity plugin for Claude Code — paper auditing, citation
 verification, experiment analysis, and methodology-first skills for
-academic workflows.
+academic workflows. Supports both LaTeX and Markdown (Pandoc → .docx)
+paper formats.
 
 Built by [Fatih Cagatay Akyon](https://scholar.google.com/citations?user=RHGyDE0AAAAJ)
 (1300+ citations, 7 patents) after 200+ Claude Code sessions, tens of
@@ -37,7 +38,7 @@ claude plugin marketplace add fcakyon/phd-skills
 claude plugin install phd-skills@phd-skills
 ```
 
-Then run `/phd-skills:setup` inside Claude Code to configure notifications, LaTeX, and allowlist.
+Then run `/phd-skills:setup` inside Claude Code to configure notifications, paper format (LaTeX or Pandoc), and allowlist.
 
 ---
 
@@ -68,7 +69,7 @@ background agents) are forwarded to your configured service (ntfy/Slack/email).
 | [`/phd-skills:factcheck`](plugin/commands/factcheck.md) | Verify BibTeX entries and cited claims against DBLP |
 | [`/phd-skills:gaps <topic>`](plugin/commands/gaps.md) | Literature gap analysis with web confirmation |
 | [`/phd-skills:fortify [venue]`](plugin/commands/fortify.md) | Select strongest ablations + anticipate reviewer questions |
-| [`/phd-skills:setup`](plugin/commands/setup.md) | Interactive onboarding (notifications, allowlist, LaTeX) |
+| [`/phd-skills:setup`](plugin/commands/setup.md) | Interactive onboarding (notifications, allowlist, LaTeX/Pandoc) |
 | [`/phd-skills:help`](plugin/commands/help.md) | Show all features at a glance |
 
 ### Skills (auto-trigger — just describe what you need)
@@ -83,6 +84,7 @@ background agents) are forwarded to your configured service (ntfy/Slack/email).
 | "prepare code for open-source release" | [Research Publishing](plugin/skills/research-publishing/SKILL.md) |
 | "what will reviewers ask about this?" | [Reviewer Defense](plugin/skills/reviewer-defense/SKILL.md) |
 | "setup latex for CVPR" | [LaTeX Setup](plugin/skills/latex-setup/SKILL.md) |
+| "setup pandoc for markdown" | [Pandoc Setup](plugin/skills/pandoc-setup/SKILL.md) |
 
 ### Agents (Claude delegates automatically)
 
@@ -97,8 +99,9 @@ background agents) are forwarded to your configured service (ntfy/Slack/email).
 |-----------------|-------------------------------|
 | [Unverified claims, wrong targets, scope creep, dropped requests, assumptions stated as facts](plugin/hooks/hooks.json) | Claude removed introduction novelty claims, analyzed wrong data split, dropped a verification question mid-commit |
 | [Ambiguous short messages before costly actions](plugin/hooks/hooks.json) | "done?" misread as "dont?", launched unwanted upload |
-| [Missing citation verification when editing .tex/.bib](plugin/scripts/citation_guard.sh) | Claude propagated unverified author names and venue info |
+| [Missing citation verification when editing .tex/.bib/.md](plugin/scripts/citation_guard.sh) | Claude propagated unverified author names and venue info |
 | [LaTeX compilation errors after .tex edits](plugin/scripts/latex_check.sh) | Errors compounded across multiple edits before being caught |
+| [Pandoc conversion errors after .md edits](plugin/scripts/pandoc_check.sh) | Markdown formatting issues compounded across edits before being caught |
 | [Unreviewed generated images/figures](plugin/scripts/visual_check.sh) | Claude analyzed metrics but never looked at the actual plots |
 | [Research state loss before context overflow](plugin/scripts/save_state.sh) | Long research sessions lost context, leading to rushed conclusions |
 
@@ -109,7 +112,7 @@ background agents) are forwarded to your configured service (ntfy/Slack/email).
 | | phd-skills | flonat/claude-research | Others |
 |---|---|---|---|
 | Commands to learn | 6 | 39 | 13-20 |
-| Research integrity hooks | 6 (prompt + command) | 1 | 0 |
+| Research integrity hooks | 7 (prompt + command) | 1 | 0 |
 | Paper-code consistency audit | 5-dimension parallel | Read-only, no code cross-ref | None |
 | Experiment monitoring + SSH notifications | Yes (ntfy/slack/email) | No | No |
 | External dependencies | **None** | npm + pip + MCP servers | MCP required |

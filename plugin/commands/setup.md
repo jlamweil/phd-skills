@@ -1,13 +1,27 @@
 ---
 description: >
   Interactive onboarding wizard — configure notifications, CLI allowlist,
-  research-specific CLAUDE.md rules, and LaTeX environment.
+  research-specific CLAUDE.md rules, and paper compilation environment
+  (LaTeX or Pandoc).
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
 # PHD-Skills Setup Wizard
 
 Guide the user through interactive setup. Use AskUserQuestion for each step.
+
+## Step 0: Paper Format
+
+Ask the user what format their paper will be in:
+
+```
+What format will your paper be in?
+
+1. LaTeX — compile with pdflatex/biber (most venues)
+2. Markdown → docx — convert with Pandoc (for collaborators who use Word)
+```
+
+Store the choice in `.env` as `PAPER_FORMAT=latex` or `PAPER_FORMAT=markdown`.
 
 ## Step 1: Feature Selection
 
@@ -19,10 +33,13 @@ Which features would you like to set up?
 1. Notifications — get alerts when long tasks complete (ntfy/slack/email)
 2. CLI Allowlist — auto-approve safe commands used in research workflows
 3. Research CLAUDE.md — add research integrity rules to your project
-4. LaTeX Environment — detect and configure LaTeX/BibTeX toolchain
+4. LaTeX Environment — detect and configure LaTeX/BibTeX toolchain       [if PAPER_FORMAT=latex]
+   Pandoc Environment — detect and configure Pandoc/citeproc toolchain   [if PAPER_FORMAT=markdown]
 
 Enter numbers separated by commas (e.g., 1,3,4), or "all":
 ```
+
+Show option 4 as "LaTeX Environment" or "Pandoc Environment" based on the format choice from Step 0.
 
 ## Step 2: Notifications (if selected)
 
@@ -85,7 +102,9 @@ Ask the user to confirm, then:
 - Read existing CLAUDE.md (if any)
 - Append the research rules section (avoiding duplicates)
 
-## Step 5: LaTeX Environment (if selected)
+## Step 5: Paper Environment (if selected)
+
+### If PAPER_FORMAT=latex (LaTeX Environment)
 
 Trigger the `latex-setup` skill by telling the user:
 
@@ -98,3 +117,18 @@ Then follow the latex-setup skill methodology:
 2. Analyze .tex files for requirements
 3. Install missing packages
 4. Verify compilation works
+
+### If PAPER_FORMAT=markdown (Pandoc Environment)
+
+Trigger the `pandoc-setup` skill by telling the user:
+
+```
+I'll now analyze your Pandoc setup and configure Markdown → docx conversion.
+```
+
+Then follow the pandoc-setup skill methodology:
+1. Check Pandoc installation
+2. Analyze .md files for requirements
+3. Configure reference.docx template
+4. Set up citeproc and bibliography
+5. Verify conversion works

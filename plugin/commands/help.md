@@ -19,7 +19,7 @@ COMMANDS (invoke directly)
   /phd-skills:factcheck  Verify BibTeX entries and cited claims against DBLP
   /phd-skills:gaps       Literature gap analysis with web confirmation
   /phd-skills:fortify    Select strongest ablations + anticipate reviewer questions
-  /phd-skills:setup      Interactive onboarding (notifications, allowlist, LaTeX)
+  /phd-skills:setup      Interactive onboarding (notifications, allowlist, LaTeX/Pandoc)
   /phd-skills:help       This help message
 
 SKILLS (auto-trigger — just describe what you need)
@@ -31,6 +31,7 @@ SKILLS (auto-trigger — just describe what you need)
   "prepare code for open-source release" → Research Publishing
   "what will reviewers ask about this?"  → Reviewer Defense
   "setup latex for CVPR"                 → LaTeX Setup
+  "setup pandoc for markdown"            → Pandoc Setup
 
 AGENTS (Claude delegates automatically)
   paper-auditor          Cross-checks paper vs code/data (isolated worktree)
@@ -40,8 +41,9 @@ ACTIVE GUARDRAILS (run silently)
   Stop hook              Checks for unverified claims, wrong targets, scope creep,
                          dropped requests, assumptions stated as facts
   Ambiguity guard        Confirms interpretation of short/ambiguous messages
-  Citation guard         Reminds to verify citations when editing .tex/.bib files
+  Citation guard         Reminds to verify citations when editing .tex/.bib/.md files
   LaTeX auto-compile     Compiles .tex after edits, catches errors early
+  Pandoc auto-check      Converts .md after edits, catches Pandoc errors early
   Visual inspection      Reminds to inspect generated images/plots
   State preservation     Saves research context before context overflow
 

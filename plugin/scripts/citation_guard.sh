@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# PreToolUse hook: remind to verify citations when editing .tex or .bib files
-# Reads tool input from stdin JSON, checks if the target file is LaTeX-related.
+# PreToolUse hook: remind to verify citations when editing .tex, .bib, or .md files
+# Reads tool input from stdin JSON, checks if the target file is LaTeX/Pandoc-related.
 # If yes, emits a system message reminding to verify citation accuracy.
 
 set -euo pipefail
@@ -15,11 +15,16 @@ if [ -z "$file_path" ]; then
     exit 0
 fi
 
-# Check if the file is a .tex or .bib file
+# Check if the file is a .tex, .bib, or .md file
 case "$file_path" in
     *.tex|*.bib)
         cat <<'EOF'
 {"decision": "allow", "reason": "CITATION GUARD: You are editing a LaTeX/BibTeX file. Before adding or modifying any citation: (1) Verify author names against DBLP, (2) Confirm venue and year match the published version, (3) Check that any cited numerical claims exist in the source paper. If uncertain about any citation detail, flag it for manual verification rather than guessing."}
+EOF
+        ;;
+    *.md)
+        cat <<'EOF'
+{"decision": "allow", "reason": "CITATION GUARD: You are editing a Markdown file. Before adding or modifying any citation: (1) Use Pandoc citation syntax [@key] — NOT \\cite{key}, (2) Verify author names against DBLP, (3) Confirm venue and year match the published version, (4) Check that any cited numerical claims exist in the source paper. If uncertain about any citation detail, flag it for manual verification rather than guessing."}
 EOF
         ;;
     *)
